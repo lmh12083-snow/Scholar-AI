@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax入门演示</title>
+</head>
+<body>
+    <script>
+        // ========== 原生Ajax 标准5步法 ==========
+        // 1. 创建 XMLHttpRequest 对象（Ajax的灵魂对象）
+        let xhr = new XMLHttpRequest();
+
+        // 2. 配置请求信息：请求方式、接口地址
+        // 参数1：请求方式 GET / POST
+        // 参数2：接口url地址
+        // 参数3：是否异步 true=异步（项目永远用true）
+        xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1', true);
+
+        // 3. 监听请求状态变化，接收后端返回的数据
+        xhr.onreadystatechange = function() {
+            // 4. 判断：请求完成 + 响应成功（状态码200）
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // 5. 获取后端返回的数据
+                console.log('后端返回的数据：', xhr.responseText);
+                // 解析JSON格式数据（后端99%返回都是JSON）
+                let data = JSON.parse(xhr.responseText);
+                console.log('解析后的JS对象：', data);
+            }
+        }
+
+        // 4. 发送请求
+        xhr.send();
+        // ========== POST 请求实战（AI项目专用模板） ==========
+        let xhr2 = new XMLHttpRequest();
+
+        // 1. open配置改为POST
+        xhr2.open('POST', 'https://jsonplaceholder.typicode.com/todos', true);
+
+        // 2. POST必加：请求头，告诉后端我传的是JSON格式数据
+        xhr2.setRequestHeader('Content-Type', 'application/json');
+
+        // 3. 监听响应
+        xhr2.onreadystatechange = function() {
+            if(xhr2.readyState === 4 && xhr2.status === 201){
+                console.log('POST请求后端返回：', xhr2.responseText);
+                let postData = JSON.parse(xhr2.responseText);
+                console.log('解析后的POST结果对象', postData);
+            }
+        }
+
+        // 4. 要发送给后端的数据
+        let sendInfo = {
+            title: "我的AI提问测试",
+            userId: 1,
+            completed: false
+        }
+
+        // 5. send里传入：JS对象转JSON字符串
+        xhr2.send(JSON.stringify(sendInfo));
+    </script>
+</body>
+</html>
